@@ -4,106 +4,83 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex,nofollow" />
-  <title>Intrados Design Studio – Candidate Portal</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-      background: linear-gradient(160deg, #f8f5ff 0%, #ffffff 100%);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
-    .wrap { max-width: 520px; width: 100%; }
-    .logo-row { display: flex; justify-content: center; margin-bottom: 28px; }
-    .logo-row img { height: 46px; }
-    h1 {
-      text-align: center;
-      color: #4E2E9A;
-      font-size: 26px;
-      margin-bottom: 8px;
-    }
-    .sub {
-      text-align: center;
-      color: #6B7280;
-      font-size: 14px;
-      margin-bottom: 36px;
-      line-height: 1.6;
-    }
-    .card {
-      display: block;
-      background: #fff;
-      border: 1.5px solid #ddd6fe;
-      border-radius: 14px;
-      padding: 20px 24px;
-      margin-bottom: 14px;
-      text-decoration: none;
-      box-shadow: 0 4px 16px rgba(108,63,197,0.06);
-      transition: all 0.18s ease;
-    }
-    .card:hover {
-      border-color: #6C3FC5;
-      box-shadow: 0 8px 24px rgba(108,63,197,0.15);
-      transform: translateY(-2px);
-    }
-    .card-title {
-      color: #4E2E9A;
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .card-desc { color: #6B7280; font-size: 13px; }
-    .arrow { color: #6C3FC5; font-size: 18px; }
-    footer {
-      text-align: center;
-      color: #9CA3AF;
-      font-size: 11px;
-      margin-top: 32px;
-    }
-  </style>
+  <title>Intrados Designs – Candidate Portal</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <div class="wrap">
-
-    <div class="logo-row">
-      <img src="https://drive.google.com/thumbnail?id=15vrGO2Vyw49k9AzooJ2wT9TMJ8rXjgJm&sz=w400" alt="Intrados Design Studio" />
+<header class="site-header" role="banner">
+  <div class="header-inner">
+    <div class="logo-lockup" aria-label="Intrados Designs">
+      <img src="https://drive.google.com/thumbnail?id=15vrGO2Vyw49k9AzooJ2wT9TMJ8rXjgJm&sz=w400" alt="Intrados Designs" class="logo-image" />
     </div>
-
-    <h1>Candidate Assessment Portal</h1>
-    <p class="sub">
-      Please select the assessment your recruiter directed you to.<br/>
-      If you're unsure which one applies to you, check your invitation email.
-    </p>
-
-    <a class="card" href="https://intrados-technology.github.io/general-assessment/">
-      <div class="card-title">Test 1: General Assessment <span class="arrow">→</span></div>
-      <div class="card-desc">First-stage screening test — required for all candidates.</div>
-    </a>
-
-    <a class="card" href="https://intrados-technology.github.io/technical-fresh/">
-      <div class="card-title">Test 2: Technical Assessment – Freshers <span class="arrow">→</span></div>
-      <div class="card-desc">Technical drawing test for entry-level / fresher candidates. Only for Technical candidates.</div>
-    </a>
-
-    <a class="card" href="https://intrados-technology.github.io/technical-Experience/">
-      <div class="card-title">Test 2: Technical Assessment – Experienced <span class="arrow">→</span></div>
-      <div class="card-desc">Technical assessment for experienced candidates. Only for Technical candidates.</div>
-    </a>
-
-    <a class="card" href="https://intrados-technology.github.io/professional-nontech/">
-      <div class="card-title">Test 2: Professional Assessment <span class="arrow">→</span></div>
-      <div class="card-desc">Assessment for HR / Admin roles. Only for Non-Technical candidates.</div>
-    </a>
-
-    <footer>© Intrados Designs · Confidential Candidate Portal</footer>
-
+    <div class="candidate-badge" id="candidate-badge" style="display:none;">
+      <span class="candidate-badge-name" id="badge-name"></span>
+      <span class="candidate-badge-ref" id="badge-ref"></span>
+    </div>
   </div>
+</header>
 
+<main class="page-wrapper" role="main">
+
+  <section id="loading-view">
+    <div class="card">
+      <div class="card-body" style="text-align:center;">
+        <p class="page-sub">Loading your assessments...</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="error-view" style="display:none;">
+    <div class="card">
+      <div class="card-header">
+        <div class="intro">
+          <span class="section-badge">⚠️ Not Verified</span>
+          <h1 class="page-title">Access Not Verified</h1>
+          <p class="page-sub" id="error-message"></p>
+          <p class="page-sub" style="margin-top:12px;">
+            <a href="https://intrados-technology.github.io/login-page/" style="color:var(--primary); font-weight:600;">← Back to Login</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="list-view" style="display:none;">
+    <div class="card">
+      <div class="card-header">
+        <div class="intro">
+          <span class="section-badge">📋 Candidate Portal</span>
+          <h1 class="page-title" id="welcome-heading">Welcome</h1>
+          <p class="page-sub">
+            Choose an assessment below to proceed. Only tests relevant to your application are shown.
+          </p>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label class="form-label" for="test-select">Select Assessment</label>
+            <select id="test-select" class="form-input">
+              <!-- populated by script.js -->
+            </select>
+          </div>
+
+          <button id="btn-proceed" class="btn-primary" type="button">
+            <span>Proceed</span>
+            <span aria-hidden="true">→</span>
+          </button>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">© Intrados Designs · Confidential Candidate Portal</footer>
+
+<script src="script.js"></script>
 </body>
 </html>

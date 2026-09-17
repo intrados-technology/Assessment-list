@@ -12,7 +12,8 @@ const TEST_URLS = {
   general:              'https://intrados-technology.github.io/general-assessment/',
   technicalFresh:       'https://intrados-technology.github.io/technical-fresh/',
   technicalExperienced: 'https://intrados-technology.github.io/technical-Experience/',
-  professional:         'https://intrados-technology.github.io/professional-nontech/'
+  professional:         'https://intrados-technology.github.io/professional-nontech/',
+  toolTest:             'https://intrados-technology.github.io/tool-test/'
 };
 
 const DOM = {
@@ -96,13 +97,31 @@ async function gvizSelect(sheetTab, query) {
 
     // Check completion status — General Assessment and the shared
     // Professional Assessment sheet (which all 3 Test-2 tracks write
-    // into), both keyed by Reference ID.
-    const [generalRows, test2Rows] = await Promise.all([
+    // into), both keyed by Reference ID. Also pull column I (Rating)
+    // from Professional Assessment, since Round 3 (Tool Test) requires
+    // having actually PASSED Test 2, not just attempted it.
+    const [generalRows, test2Rows, toolTestRows] = await Promise.all([
       gvizSelect('General Assessment', "select B where B = '" + safeRefId + "'"),
-      gvizSelect('Professional Assessment', "select B where B = '" + safeRefId + "'")
+      gvizSelect('Professional Assessment', "select B,I where B = '" + safeRefId + "'"),
+      gvizSelect('Tool Test', "select B where B = '" + safeRefId + "'")
     ]);
     const generalCompleted = generalRows.length > 0;
     const test2Completed   = test2Rows.length > 0;
+    const toolTestCompleted = toolTestRows.length > 0;
+
+    const passingRatings = ['borderline', 'hire', 'strong hire', 'exceptional'];
+    let test2Passed = false;
+    if (test2Rows.length > 0) {
+      const rating = test2Rows[0].c[1] && test2Rows[0].c[1].v ? String(test2Rows[0].c[1].v).trim().toLowerCase() : '';
+      test2Passed = passingRatings.indexOf(rating) !== -1;
+    }
+
+    // Round 3 (Tool Test) only applies to Technical candidates who
+    // have already passed Test 2.
+    let toolTest = null;
+    if (domain === 'technical' && test2Passed) {
+      toolTest = { label: 'Round 3: Tool Test', url: TEST_URLS.toolTest };
+    }
 
     // ── Populate header badge ──────────────────────────────────
     DOM.badgeName.textContent = fullName;
@@ -126,6 +145,14 @@ async function gvizSelect(sheetTab, query) {
       test2Option.textContent = test2.label + (test2Completed ? ' (Completed)' : '');
       test2Option.disabled = test2Completed;
       DOM.testSelect.appendChild(test2Option);
+    }
+
+    if (toolTest) {
+      const toolTestOption = document.createElement('option');
+      toolTestOption.value = toolTest.url;
+      toolTestOption.textContent = toolTest.label + (toolTestCompleted ? ' (Completed)' : '');
+      toolTestOption.disabled = toolTestCompleted;
+      DOM.testSelect.appendChild(toolTestOption);
     }
 
     // Select the first non-disabled option by default

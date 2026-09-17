@@ -13,7 +13,7 @@ const TEST_URLS = {
   technicalFresh:       'https://intrados-technology.github.io/technical-fresh/',
   technicalExperienced: 'https://intrados-technology.github.io/technical-Experience/',
   professional:         'https://intrados-technology.github.io/professional-nontech/',
-  toolTest:             'https://intrados-technology.github.io/tool-test/'
+  toolTest:             'https://intrados-technology.github.io/Tool-Test-Technical-/'
 };
 
 const DOM = {
